@@ -22,7 +22,7 @@ class User {
     try {
       const findUser = await pool.query("SELECT * FROM users WHERE email = $1;", [email]);
       return findUser;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
@@ -31,7 +31,7 @@ class User {
     try {
       const users = await pool.query("SELECT * FROM users;");
       return users;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }

@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'url("images/tech_background.jpg") no-repeat center center/cover',
   },
   jumbotron: {
-    background: "rgba(255, 255, 255, .6)",
+    background: "rgba(0, 255, 255, .6)",
     padding: "20px",
     borderRadius: "20px",
     color: "#FFFFFF",
@@ -54,13 +54,13 @@ const Login = () => {
         <h2 className="display-3">Login <FontAwesomeIcon icon={faSignInAlt} /></h2>
         <Form>
           <FormGroup className={classes.formGroup}>
-            <Input onChange={(e) => { 
+            <Input onChange={(e) => {
               setEmail(e.target.value);
             }} type="email" name="email" id="exampleEmail" placeholder="Email" />
           </FormGroup>
           <FormGroup className={classes.formGroup}>
-            <Input onChange={(e) => { 
-              setPassword(e.target.value) 
+            <Input onChange={(e) => {
+              setPassword(e.target.value)
             }} type="password" name="password" id="examplePassword" placeholder="Password" />
           </FormGroup>
           <Button onClick={(e) => {

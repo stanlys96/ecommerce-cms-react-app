@@ -43,6 +43,7 @@ class UserController {
         res.status(404).json({ message: "Email or password is incorrect!" });
       }
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }
