@@ -3,21 +3,20 @@ const { hashPassword, comparePassword } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
 
 class UserController {
-  static async register(req, res) {
+  static async register(req, res, next) {
     try {
       const newUser = await User.register(req.body);
       if (newUser == "email_exist") {
-        res.json({ message: "Email already registered!" });
+        res.status(404).json({ message: "Email already registered!" });
       } else {
-        console.log(newUser);
-        res.json({ ...newUser.rows[0], message: "Success" });
+        res.status(200).json({ ...newUser.rows[0], message: "Success" });
       }
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     const { email, password } = req.body;
     try {
       const findUser = await User.login(email);
@@ -30,7 +29,7 @@ class UserController {
             last_name: loggedInUser.last_name,
             email: loggedInUser.email
           });
-          res.json({
+          res.status(200).json({
             first_name: loggedInUser.first_name,
             last_name: loggedInUser.last_name,
             email: loggedInUser.email,
@@ -38,22 +37,22 @@ class UserController {
             message: "Success"
           });
         } else {
-          res.json({ message: "Email or password is incorrect!" });
+          res.status(404).json({ message: "Email or password is incorrect!" });
         }
       } else {
-        res.json({ message: "Email or password is incorrect!" });
+        res.status(404).json({ message: "Email or password is incorrect!" });
       }
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   }
 
-  static async getAllUsers(req, res) {
+  static async getAllUsers(req, res, next) {
     try {
       const users = await User.getAllUsers();
-      res.json(users);
+      res.status(200).json(users);
     } catch (err) {
-      console.log(err);
+      next(err);
     }
   }
 }

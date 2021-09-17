@@ -19,13 +19,21 @@ class User {
   }
 
   static async login(email) {
-    const findUser = await pool.query("SELECT * FROM users WHERE email = $1;", [email]);
-    return findUser;
+    try {
+      const findUser = await pool.query("SELECT * FROM users WHERE email = $1;", [email]);
+      return findUser;
+    } catch(err) {
+      console.log(err);
+    }
   }
 
   static async getAllUsers() {
-    const users = await pool.query("SELECT * FROM users");
-    return users;
+    try {
+      const users = await pool.query("SELECT * FROM users;");
+      return users;
+    } catch(err) {
+      console.log(err);
+    }
   }
 }
 
