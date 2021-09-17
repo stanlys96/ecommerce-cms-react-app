@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Style from 'style-it';
 import { Typography } from "@material-ui/core";
-import { Jumbotron, Button } from 'reactstrap';
+import { Jumbotron, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -13,17 +13,22 @@ const useStyles = makeStyles((theme) => ({
     background: 'url("images/tech_background.jpg") no-repeat center center/cover',
   },
   jumbotron: {
-    margin: "0 150px",
     background: "rgba(255, 255, 255, .6)",
     padding: "20px",
     borderRadius: "20px",
     color: "#FFFFFF",
     width: '100%',
+  },
+  formGroup: {
+    margin: "20px 150px 20px 150px",
   }
 }));
 
 const Login = () => {
   const classes = useStyles();
+  let [email, setEmail] = useState('');
+  let [password, setPassword] = useState('');
+  let [test, setTest] = useState("");
   return Style.it(
     `
     #container {
@@ -31,9 +36,7 @@ const Login = () => {
       background-color: rgba(0, 0, 0, 0.6);
       height: 92vh;
       margin: 8vh 0 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 50px 200px 0;
     }
     #container:before {
       content: '';
@@ -48,11 +51,22 @@ const Login = () => {
     `,
     <div id="container">
       <Jumbotron className={classes.jumbotron}>
-        <h2 className="display-3">Welcome To Techintos! <FontAwesomeIcon icon={faLaptopCode} /></h2>
-        <p className="lead">We sell high quality tech products!</p>
-        <hr className="my-2" />
-        <p>Feel free to ask us any questions!</p>
-        <Button color="primary"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button>
+        <h2 className="display-3">Login <FontAwesomeIcon icon={faSignInAlt} /></h2>
+        <Form>
+          <FormGroup className={classes.formGroup}>
+            <Input onChange={(e) => { 
+              setEmail(e.target.value);
+            }} type="email" name="email" id="exampleEmail" placeholder="Email" />
+          </FormGroup>
+          <FormGroup className={classes.formGroup}>
+            <Input onChange={(e) => { 
+              setPassword(e.target.value) 
+            }} type="password" name="password" id="examplePassword" placeholder="Password" />
+          </FormGroup>
+          <Button onClick={(e) => {
+            e.preventDefault();
+          }} color="primary">Submit</Button>
+        </Form>
       </Jumbotron>
     </div>
   );

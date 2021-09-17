@@ -5,6 +5,7 @@ import { Typography } from "@material-ui/core";
 import { Jumbotron, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -13,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
     background: 'url("images/tech_background.jpg") no-repeat center center/cover',
   },
   jumbotron: {
-    margin: "0 150px",
     background: "rgba(51, 170, 51, .6)",
     padding: "20px",
     borderRadius: "20px",
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
+  let history = useHistory();
   return Style.it(
     `
     #container {
@@ -31,9 +32,7 @@ const Home = () => {
       background-color: rgba(0, 0, 0, 0.6);
       height: 92vh;
       margin: 8vh 0 0 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 50px 200px 0;
     }
     #container:before {
       content: '';
@@ -52,7 +51,7 @@ const Home = () => {
         <p className="lead">We sell high quality tech products!</p>
         <hr className="my-2" />
         <p>Feel free to ask us any questions!</p>
-        <Button color="primary"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button>
+        <Button color="primary" onClick={() => {history.push("/login")}}><FontAwesomeIcon icon={faSignInAlt} /> Login</Button>
       </Jumbotron>
     </div>
   );
