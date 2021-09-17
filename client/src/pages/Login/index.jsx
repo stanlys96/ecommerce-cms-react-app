@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   jumbotron: {
     margin: "0 150px",
-    background: "rgba(51, 170, 51, .6)",
+    background: "rgba(255, 255, 255, .6)",
     padding: "20px",
     borderRadius: "20px",
     color: "#FFFFFF",
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Home = () => {
+const Login = () => {
   const classes = useStyles();
   return Style.it(
     `
@@ -58,4 +58,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default Login;
