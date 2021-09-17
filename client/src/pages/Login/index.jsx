@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { login } from '../../store/action';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
 import Style from 'style-it';
 import { Typography } from "@material-ui/core";
@@ -25,10 +27,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user.user);
+  const status = useSelector(state => state.user.status);
+  const message = useSelector(state => state.user.message);
   const classes = useStyles();
   let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
   let [test, setTest] = useState("");
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+  useEffect(() => {
+    console.log(message);
+  }, [message])
   return Style.it(
     `
     #container {
@@ -65,7 +77,8 @@ const Login = () => {
           </FormGroup>
           <Button onClick={(e) => {
             e.preventDefault();
-          }} color="primary">Submit</Button>
+            dispatch(login(email, password));
+          }} color="primary">{message == "Success" ? "Habibu" : "Submit"}</Button>
         </Form>
       </Jumbotron>
     </div>
