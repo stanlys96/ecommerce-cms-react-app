@@ -9,7 +9,7 @@ class UserController {
       if (newUser == "email_exist") {
         res.json({ message: "Email already registered!" });
       } else {
-        print(newUser);
+        console.log(newUser);
         res.json({ ...newUser.rows[0], message: "Success" });
       }
     } catch (err) {
