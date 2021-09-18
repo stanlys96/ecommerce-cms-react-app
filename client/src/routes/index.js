@@ -1,5 +1,6 @@
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import Dashboard from '../pages/Dashboard';
 
 const routes = [
   {
@@ -14,6 +15,13 @@ const routes = [
     name: 'LoginPage',
     path: '/login',
     component: Login,
+    exact: true,
+  },
+  {
+    id: 3,
+    name: 'DashboardPage',
+    path: '/dashboard',
+    component: Dashboard,
     exact: true,
   }
 ];

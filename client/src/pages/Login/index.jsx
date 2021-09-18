@@ -7,6 +7,7 @@ import { Typography } from "@material-ui/core";
 import { Jumbotron, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -15,19 +16,35 @@ const useStyles = makeStyles((theme) => ({
     background: 'url("images/tech_background.jpg") no-repeat center center/cover',
   },
   jumbotron: {
-    background: "rgba(0, 255, 255, .6)",
     padding: "20px",
     borderRadius: "20px",
     color: "#FFFFFF",
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: '400px',
   },
   formGroup: {
-    margin: "20px 150px 20px 150px",
+    width: '100%',
+    margin: '20px 0 0 0',
+  },
+  buttonLogin: {
+    width: '100%',
+    margin: '20px 0 0 0',
   }
 }));
 
 const Login = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector(state => state.user.user);
   const status = useSelector(state => state.user.status);
   const message = useSelector(state => state.user.message);
@@ -40,6 +57,9 @@ const Login = () => {
   }, [user]);
   useEffect(() => {
     console.log(message);
+    if (message == "Success") {
+      history.push('/dashboard');
+    }
   }, [message])
   return Style.it(
     `
@@ -64,7 +84,7 @@ const Login = () => {
     <div id="container">
       <Jumbotron className={classes.jumbotron}>
         <h2 className="display-3">Login <FontAwesomeIcon icon={faSignInAlt} /></h2>
-        <Form>
+        <Form className={classes.form}>
           <FormGroup className={classes.formGroup}>
             <Input onChange={(e) => {
               setEmail(e.target.value);
@@ -75,7 +95,7 @@ const Login = () => {
               setPassword(e.target.value)
             }} type="password" name="password" id="examplePassword" placeholder="Password" />
           </FormGroup>
-          <Button onClick={(e) => {
+          <Button className={classes.buttonLogin} onClick={(e) => {
             e.preventDefault();
             dispatch(login(email, password));
           }} color="primary">{message == "Success" ? "Habibu" : "Submit"}</Button>

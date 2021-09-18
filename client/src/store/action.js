@@ -20,6 +20,7 @@ export function login(email, password) {
   return async (dispatch) => {
     try {
       const url = 'https://ecommerce-cms-react.herokuapp.com/users/login';
+      console.log('ey');
       const response = await axios({
         url,
         method: 'POST',
@@ -28,6 +29,7 @@ export function login(email, password) {
           password
         }
       });
+      console.log('hey');
       if (response.status == 200) {
         const user = {
           first_name: response.data.first_name,
@@ -38,11 +40,13 @@ export function login(email, password) {
         dispatch(setMessage(response.data.message));
         dispatch(setStatus('logged_in'));
       } else {
-        console.log(response);
+        console.log(response, "<<<<");
         dispatch(setMessage(response.data.message));
       }
     } catch (err) {
-      console.log(err);
+      if (err.message == "Request failed with status code 404") {
+        dispatch(setMessage(err.message));
+      }
     }
   }
 }

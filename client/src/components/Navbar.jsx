@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     height: '8vh',
     display: 'flex',
     justifyContent: 'center',
+    zIndex: '-1',
   },
   unorderedList: {
     listStyle: 'none',
@@ -41,8 +42,8 @@ const Navbar = () => {
       <ul className={classes.unorderedList}>
         <li><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
         <ul className={classes.secondUnorderedList}>
-          <li className={classes.li}><Button onClick={() => {history.push('/')}} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>
-          <li className={classes.li}><Button onClick={() => {history.push('/login')}} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>
+          <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>
+          <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>
         </ul>
       </ul>
     </AppBar>
