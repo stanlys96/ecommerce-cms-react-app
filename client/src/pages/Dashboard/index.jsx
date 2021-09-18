@@ -4,6 +4,8 @@ import { Typography } from "@material-ui/core";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Form, FormGroup, Input, Label } from 'reactstrap';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from 'react-redux';
+import { addingProduct } from '../../store/action';
 
 const useStyles = makeStyles((theme) => ({
   scaffold: {
@@ -48,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [name, setName] = useState('');
@@ -139,7 +142,12 @@ const Dashboard = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>Add</Button>
+          <Button color="primary" onClick={(e) => {
+            e.preventDefault();
+            console.log(imageUrl);
+            dispatch(addingProduct(imageUrl, name, category, price, stock));
+            toggle();
+          }}>Add</Button>
           <Button color="danger" onClick={toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>

@@ -1,4 +1,5 @@
 import axios from 'axios';
+const globalUrl = 'https://ecommerce-cms-react.herokuapp.com/';
 
 export function setUser(payload) {
   return { type: 'USER/SETUSER', payload }
@@ -16,10 +17,18 @@ export function getUser() {
   return { type: 'USER/GETUSER' }
 }
 
+export function getProducts(payload) {
+  return { type: 'PRODUCT/GETPRODUCTS', payload };
+}
+
+export function addProduct(payload) {
+  return { type: 'PRODUCT/ADDPRODUCT', payload };
+}
+
 export function login(email, password) {
   return async (dispatch) => {
     try {
-      const url = 'https://ecommerce-cms-react.herokuapp.com/users/login';
+      const url = `${globalUrl}/users/login`;
       console.log('ey');
       const response = await axios({
         url,
@@ -47,6 +56,44 @@ export function login(email, password) {
       if (err.message == "Request failed with status code 404") {
         dispatch(setMessage(err.message));
       }
+    }
+  }
+}
+
+export function gettingProducts() {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/products/getAll`;
+      const response = await axios({
+        url,
+        method: 'GET',
+      });
+      dispatch(getProducts(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export function addingProduct(imageUrl, name, category, price, stock) {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}products/addProduct`;
+      const response = await axios({
+        url,
+        method: 'POST',
+        data: {
+          imageUrl,
+          name,
+          category,
+          price,
+          stock,
+        }
+      });
+      console.log(response, "<<<");
+      dispatch(addProduct(response.data));
+    } catch (err) {
+      console.log(err, "<<< error");
     }
   }
 }
