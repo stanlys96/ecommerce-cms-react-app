@@ -6,13 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
+import { setStatus, setMessage } from '../store/action';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
     height: '8vh',
     display: 'flex',
     justifyContent: 'center',
-    zIndex: '-1',
+    position: 'fixed',
+    zIndex: 1,
   },
   unorderedList: {
     listStyle: 'none',
@@ -37,13 +40,28 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   let history = useHistory();
+  const status = useSelector(state => state.user.status);
+  const dispatch = useDispatch();
+  useEffect(() => {
+  }, []);
+  useEffect(() => {
+    console.log(status, "<<<");
+  }, [status]);
   return (
-    <AppBar color="primary" position="fixed" className={classes.appBar}>
+    <AppBar color="primary" className={classes.appBar}>
       <ul className={classes.unorderedList}>
         <li><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
         <ul className={classes.secondUnorderedList}>
-          <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>
-          <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>
+          {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
+          {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="danger"><FontAwesomeIcon icon={faHome} /> Banners</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Products</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => {
+            dispatch(setStatus(false));
+            localStorage.setItem('userLoggedIn', false);
+            dispatch(setMessage('Good bye'));
+            history.push('/');
+          }} color="danger"><FontAwesomeIcon icon={faHome} /> Logout</Button></li>}
         </ul>
       </ul>
     </AppBar>

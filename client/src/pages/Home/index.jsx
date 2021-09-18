@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Style from 'style-it';
 import { Typography } from "@material-ui/core";
@@ -51,7 +51,7 @@ const Home = () => {
         <p className="lead">We sell high quality tech products!</p>
         <hr className="my-2" />
         <p>Feel free to ask us any questions!</p>
-        <Button color="primary" onClick={() => {history.push("/login")}}><FontAwesomeIcon icon={faSignInAlt} /> Login</Button>
+        <Button color="primary" onClick={() => { history.push("/login") }}><FontAwesomeIcon icon={faSignInAlt} /> Login</Button>
       </Jumbotron>
     </div>
   );

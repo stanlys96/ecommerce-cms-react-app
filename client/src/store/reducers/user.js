@@ -1,6 +1,6 @@
 const initialState = {
   user: {},
-  status: '',
+  status: localStorage.getItem('userLoggedIn'),
   message: '',
 }
 
@@ -9,6 +9,8 @@ function reducer(state = initialState, action) {
   switch (type) {
     case 'USER/GETUSER':
       return { ...state.user };
+    case 'USER/GETSTATUS':
+      return { ...state.status };
     case 'USER/SETUSER':
       return { ...state, user: payload }
     case 'USER/SETSTATUS':

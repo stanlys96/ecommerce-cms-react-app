@@ -55,12 +55,13 @@ const Login = () => {
   useEffect(() => {
     console.log(user);
   }, [user]);
-  useEffect(() => {
+  useEffect(async () => {
     console.log(message);
     if (message == "Success") {
+      await localStorage.setItem('userLoggedIn', true);
       history.push('/dashboard');
     }
-  }, [message])
+  }, [message]);
   return Style.it(
     `
     #container {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const globalUrl = 'https://ecommerce-cms-react.herokuapp.com/';
+const globalUrl = 'https://ecommerce-cms-react.herokuapp.com';
 
 export function setUser(payload) {
   return { type: 'USER/SETUSER', payload }
@@ -17,6 +17,10 @@ export function getUser() {
   return { type: 'USER/GETUSER' }
 }
 
+export function getStatus() {
+  return { type: 'USER/GETSTATUS' };
+}
+
 export function getProducts(payload) {
   return { type: 'PRODUCT/GETPRODUCTS', payload };
 }
@@ -29,7 +33,6 @@ export function login(email, password) {
   return async (dispatch) => {
     try {
       const url = `${globalUrl}/users/login`;
-      console.log('ey');
       const response = await axios({
         url,
         method: 'POST',
@@ -38,7 +41,6 @@ export function login(email, password) {
           password
         }
       });
-      console.log('hey');
       if (response.status == 200) {
         const user = {
           first_name: response.data.first_name,
@@ -47,7 +49,7 @@ export function login(email, password) {
         }
         dispatch(setUser(user));
         dispatch(setMessage(response.data.message));
-        dispatch(setStatus('logged_in'));
+        dispatch(setStatus(true));
       } else {
         console.log(response, "<<<<");
         dispatch(setMessage(response.data.message));
@@ -78,7 +80,7 @@ export function gettingProducts() {
 export function addingProduct(imageUrl, name, category, price, stock) {
   return async (dispatch) => {
     try {
-      const url = `${globalUrl}products/addProduct`;
+      const url = `${globalUrl}/products/addProduct`;
       const response = await axios({
         url,
         method: 'POST',
