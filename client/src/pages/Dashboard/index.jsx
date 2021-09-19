@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Form, FormGroup, Input, Label } from 'reactstrap';
@@ -14,10 +15,22 @@ var formatter = new Intl.NumberFormat('id-ID', {
   maximumFractionDigits: 0,
 });
 
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.close)
+  }
+})
+
 const useStyles = makeStyles((theme) => ({
   scaffold: {
     backgroundColor: '#F9EED3',
-    paddingBottom: '30px'
+    paddingBottom: '30px',
+    minHeight: '92vh',
   },
   container: {
     maxWidth: '1200px',
@@ -145,11 +158,30 @@ const Dashboard = () => {
                     editToggle();
                   }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
                     e.preventDefault();
-                    dispatch(deletingProduct(res.id));
+                    Swal.fire({
+                      title: 'Are you sure?',
+                      text: "You won't be able to revert this!",
+                      icon: 'warning',
+                      showCancelButton: true,
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        Toast.fire({
+                          icon: 'success',
+                          title: `Successfully deleted ${res.name}!`
+                        });
+                        dispatch(deletingProduct(res.id));
+                      }
+                    })
                   }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
                 </tr>
               ))
-            ) : (<h2 style={{ textAlign: "center" }}>No results found...</h2>
+            ) : (<tr>
+              <td colSpan="7"><h2 style={{ textAlign: "center", margin: '0 auto', width: '100%' }}>No results found...</h2>
+              </td>
+            </tr>
             )}
           </tbody>
         </Table>
@@ -201,8 +233,11 @@ const Dashboard = () => {
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            console.log(imageUrl);
             dispatch(addingProduct(imageUrl, name, category, price, stock));
+            Toast.fire({
+              icon: 'success',
+              title: `Successfully added ${name}!`
+            });
             toggle();
           }}>Add</Button>
           <Button color="danger" onClick={toggle}>Cancel</Button>
@@ -258,6 +293,10 @@ const Dashboard = () => {
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
             dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
+            Toast.fire({
+              icon: 'success',
+              title: `Successfully edited a product!`
+            });
             editToggle();
           }}>Edit</Button>
           <Button color="danger" onClick={editToggle}>Cancel</Button>

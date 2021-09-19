@@ -1,5 +1,17 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 const globalUrl = 'https://ecommerce-cms-react.herokuapp.com';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.close)
+  }
+})
 
 export function setUser(payload) {
   return { type: 'USER/SETUSER', payload }
@@ -50,6 +62,10 @@ export function login(email, password) {
         dispatch(setUser(user));
         dispatch(setMessage(response.data.message));
         dispatch(setStatus(true));
+        Toast.fire({
+          icon: 'success',
+          title: `Successfully logged in as ${email}!`
+        });
       } else {
         console.log(response, "<<<<");
         dispatch(setMessage(response.data.message));
@@ -85,7 +101,7 @@ export function addingProduct(imageUrl, name, category, price, stock) {
         url,
         method: 'POST',
         data: {
-          imageUrl,
+          image_url: imageUrl,
           name,
           category,
           price,

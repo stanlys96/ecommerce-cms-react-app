@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 import { login } from '../../store/action';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,6 +42,17 @@ const useStyles = makeStyles((theme) => ({
     margin: '20px 0 0 0',
   }
 }));
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.close)
+  }
+})
 
 const Login = () => {
   const dispatch = useDispatch();

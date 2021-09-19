@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import Swal from 'sweetalert2';
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +9,17 @@ import { Button } from 'reactstrap';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { setStatus, setMessage } from '../store/action';
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.close)
+  }
+})
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -60,6 +72,10 @@ const Navbar = () => {
             dispatch(setStatus(false));
             localStorage.setItem('userLoggedIn', false);
             dispatch(setMessage('Good bye'));
+            Toast.fire({
+              icon: 'success',
+              title: `Good Bye!`
+            });
             history.push('/');
           }} color="danger"><FontAwesomeIcon icon={faHome} /> Logout</Button></li>}
         </ul>
