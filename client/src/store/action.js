@@ -109,11 +109,30 @@ export function updatingProduct(id, imageUrl, name, category, price, stock) {
         method: 'PUT',
         data: {
           id,
-          imageUrl,
+          image_url: imageUrl,
           name,
           category,
           price,
           stock,
+        }
+      });
+      console.log(response.data, "<<< update");
+      dispatch(gettingProducts());
+    } catch (err) {
+      console.log(err, "<<< error");
+    }
+  }
+}
+
+export function deletingProduct(id) {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/products/deleteProduct`;
+      const response = await axios({
+        url,
+        method: 'DELETE',
+        data: {
+          id,
         }
       });
       console.log(response.data, "<<< update");

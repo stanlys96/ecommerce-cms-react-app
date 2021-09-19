@@ -5,8 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Form, FormGr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
-import { addingProduct, gettingProducts, updatingProduct } from '../../store/action';
-import Image from '../../assets/macbook_air.png';
+import { addingProduct, gettingProducts, updatingProduct, deletingProduct } from '../../store/action';
 
 // Create our number formatter.
 var formatter = new Intl.NumberFormat('id-ID', {
@@ -60,8 +59,6 @@ const useStyles = makeStyles((theme) => ({
   },
   trLast: {
     textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
     fontWeight: '600',
   },
   tableRow: {
@@ -73,6 +70,8 @@ const useStyles = makeStyles((theme) => ({
   tableButton: {
     fontWeight: '600',
     marginBottom: '5px',
+    display: 'block',
+    width: '100%',
   },
   img: {
     width: '150px',
@@ -144,7 +143,10 @@ const Dashboard = () => {
                     setEditPrice(res.price);
                     setEditStock(res.stock);
                     editToggle();
-                  }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
+                  }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(deletingProduct(res.id));
+                  }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
                 </tr>
               ))
             ) : (<h2 style={{ textAlign: "center" }}>No results found...</h2>
@@ -172,10 +174,13 @@ const Dashboard = () => {
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Category</Label>
-              <Input onChange={(e) => {
-                e.preventDefault();
-                setCategory(e.target.value);
-              }} type="text" name="category" id="category" placeholder="Category" />
+              <select onChange={(e) => { setCategory(e.target.value) }} class="form-select" aria-label="Default select example">
+                <option value="" selected>=== SELECT CATEGORY ===</option>
+                <option value="Laptop">Laptop</option>
+                <option value="Phone">Phone</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Other">Other</option>
+              </select>
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Price</Label>
@@ -223,10 +228,15 @@ const Dashboard = () => {
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Category</Label>
-              <Input value={editCategory} onChange={(e) => {
-                e.preventDefault();
+              <select onChange={(e) => {
                 setEditCategory(e.target.value);
-              }} type="text" name="category" id="category" placeholder="Category" />
+                console.log(e.target.value);
+              }} class="form-select" aria-label="Default select example">
+                <option value="Laptop" selected={editCategory === "Laptop" ? true : false}>Laptop</option>
+                <option value="Phone" selected={editCategory === "Phone" ? true : false}>Phone</option>
+                <option value="Tablet" selected={editCategory === "Tablet" ? true : false}>Tablet</option>
+                <option value="Other" selected={editCategory === "Other" ? true : false}>Other</option>
+              </select>
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Price</Label>
@@ -247,7 +257,7 @@ const Dashboard = () => {
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            dispatch(updatingProduct(editId, editName, editImageUrl, editCategory, editPrice, editStock));
+            dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
             editToggle();
           }}>Edit</Button>
           <Button color="danger" onClick={editToggle}>Cancel</Button>

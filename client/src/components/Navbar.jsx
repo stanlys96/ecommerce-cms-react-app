@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   li: {
     display: 'inline-block',
-    marginRight: '20px',
+    marginLeft: '20px',
   },
   tag: {
     textDecoration: "none",
