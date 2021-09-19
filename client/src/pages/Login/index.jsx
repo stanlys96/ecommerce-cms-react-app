@@ -124,7 +124,7 @@ const Login = () => {
               });
             } else {
               setLoading(true);
-              dispatch(login(email, password));
+              dispatch(login(email, password, setLoading));
             }
           }} color="primary">{loading ? "" : <FontAwesomeIcon icon={faMousePointer} />}{loading ? <Loader
             type="Puff"

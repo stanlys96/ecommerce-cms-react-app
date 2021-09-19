@@ -49,7 +49,7 @@ export function addBanner(payload) {
   return { type: 'BANNER/ADDBANNER', payload };
 }
 
-export function login(email, password) {
+export function login(email, password, setLoading) {
   return async (dispatch) => {
     try {
       const url = `${globalUrl}/users/login`;
@@ -80,9 +80,11 @@ export function login(email, password) {
           title: 'Error...',
           text: response.data.message,
         });
+        setLoading(false);
         dispatch(setMessage(response.data.message));
       }
     } catch (err) {
+      setLoading(false);
       if (err.message == "Request failed with status code 404") {
         Swal.fire({
           icon: 'error',
