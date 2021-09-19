@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Form, FormGr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
-import { addingProduct, gettingProducts } from '../../store/action';
+import { addingProduct, gettingProducts, updatingProduct } from '../../store/action';
 import Image from '../../assets/macbook_air.png';
 
 // Create our number formatter.
@@ -247,6 +247,7 @@ const Dashboard = () => {
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
+            dispatch(updatingProduct(editId, editName, editImageUrl, editCategory, editPrice, editStock));
             editToggle();
           }}>Edit</Button>
           <Button color="danger" onClick={editToggle}>Cancel</Button>

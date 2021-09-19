@@ -3,7 +3,7 @@ const pool = require('../database/db');
 class Product {
   static async getProducts() {
     try {
-      const products = pool.query("SELECT * FROM products;");
+      const products = pool.query("SELECT * FROM products ORDER BY id ASC;");
       return products;
     } catch (err) {
       console.log(err);
@@ -11,9 +11,9 @@ class Product {
   }
 
   static async addProduct(product) {
-    let { imageUrl, name, category, price, stock } = product;
+    let { image_url, name, category, price, stock } = product;
     try {
-      const newProduct = await pool.query("INSERT INTO products (image_url, name, category, price, stock) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [imageUrl, name, category, price, stock]);
+      const newProduct = await pool.query("INSERT INTO products (image_url, name, category, price, stock) VALUES ($1, $2, $3, $4, $5) RETURNING *;", [image_url, name, category, price, stock]);
       return newProduct;
     } catch (err) {
       console.log(err);
@@ -21,12 +21,14 @@ class Product {
   }
 
   static async updateProduct(product) {
-    let { id, imageUrl, name, category, price, stock } = product;
+    let { id, image_url, name, category, price, stock } = product;
+    price = parseInt(price);
+    stock = parseInt(stock);
     try {
-      const updateProduct = await pool.query("UPDATE products SET image_url = $1, name = $2, category = $3, price, $4, stock = $5 WHERE id = $6 RETURNING *;", [imageUrl, name, category, price, stock, id]);
+      const updateProduct = await pool.query("UPDATE products SET image_url = $1, name = $2, category = $3, price = $4, stock = $5 WHERE id = $6 RETURNING *;", [image_url, name, category, price, stock, id]);
       return updateProduct;
     } catch (err) {
-      console.log(err);
+      console.log(err, "<<<");
     }
   }
 
