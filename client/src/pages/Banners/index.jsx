@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { addingBanner, gettingBanners, updatingBanner, deletingBanner } from '../../store/action';
+import Loader from "react-loader-spinner";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -103,9 +104,8 @@ const Banners = () => {
 
   const banners = useSelector(state => state.banner.banners);
 
-  useEffect(() => {
-    dispatch(gettingBanners());
-    console.log(banners);
+  useEffect(async () => {
+    await dispatch(gettingBanners());
   }, []);
   const toggle = () => setModal(!modal);
   const editToggle = () => setEditModal(!editModal);
@@ -113,10 +113,10 @@ const Banners = () => {
     <div className={classes.scaffold}>
       <div className={classes.container}>
         <Typography className={classes.title}>Banners List</Typography>
-        <div style={{ display: 'flex', width: '100%', justifyContent: 'end' }}>
+        {banners.length > 0 ? <div style={{ display: 'flex', width: '100%', justifyContent: 'end' }}>
           <Button color="primary" className={classes.button} onClick={toggle}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> &nbsp;Add Banner</Button>
-        </div>
-        <Table>
+        </div> : null}
+        {banners.length > 0 ? <Table>
           <thead className="bg-warning text-dark">
             <tr>
               <th className={classes.thead}>No</th>
@@ -127,49 +127,54 @@ const Banners = () => {
             </tr>
           </thead>
           <tbody>
-            {banners.length > 0 ? (
-              banners.map((res, index) => (
-                <tr className={classes.tableRow}>
-                  <th className={classes.tr} scope="row">{index + 1}</th>
-                  <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
-                  <td className={classes.tr}>{res.name}</td>
-                  <td className={classes.tr}>{String(res.status)[0].toUpperCase() + String(res.status).slice(1)}</td>
-                  <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
-                    e.preventDefault();
-                    setEditId(res.id);
-                    setEditImageUrl(res.image_url);
-                    setEditName(res.name);
-                    setEditStatus(res.status);
-                    editToggle();
-                  }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
-                    e.preventDefault();
-                    Swal.fire({
-                      title: 'Are you sure?',
-                      text: "You won't be able to revert this!",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        dispatch(deletingBanner(res.id));
-                        Toast.fire({
-                          icon: 'success',
-                          title: `Successfully deleted ${res.name}!`
-                        });
-                      }
-                    })
-                  }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
-                </tr>
-              ))
-            ) : (<tr>
-              <td colSpan="7"><h2 style={{ textAlign: "center", margin: '0 auto', width: '100%' }}>No results found...</h2>
-              </td>
-            </tr>
-            )}
+            {banners.map((res, index) => (
+              <tr className={classes.tableRow}>
+                <th className={classes.tr} scope="row">{index + 1}</th>
+                <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
+                <td className={classes.tr}>{res.name}</td>
+                <td className={classes.tr}>{String(res.status)[0].toUpperCase() + String(res.status).slice(1)}</td>
+                <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
+                  e.preventDefault();
+                  setEditId(res.id);
+                  setEditImageUrl(res.image_url);
+                  setEditName(res.name);
+                  setEditStatus(res.status);
+                  editToggle();
+                }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
+                  e.preventDefault();
+                  Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      dispatch(deletingBanner(res.id));
+                      Toast.fire({
+                        icon: 'success',
+                        title: `Successfully deleted ${res.name}!`
+                      });
+                    }
+                  })
+                }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
+              </tr>
+            ))
+            }
           </tbody>
-        </Table>
+        </Table> : <div style={{ width: '100%', margin: '0 auto' }}>
+          <Loader
+            style={{ textAlign: 'center', marginTop: '100px' }}
+            type="Puff"
+            color="#00BFFF"
+            height={150}
+            width={150}
+            timeout={10000000}
+          />
+          <h2 style={{ textAlign: 'center' }}>Loading...</h2>
+        </div>}
       </div>
       <Modal style={{ zIndex: 5 }} isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Add A Banner</ModalHeader>

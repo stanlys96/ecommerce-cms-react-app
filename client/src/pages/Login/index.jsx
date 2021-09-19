@@ -9,6 +9,7 @@ import { Jumbotron, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from "react-router";
+import Loader from "react-loader-spinner";
 
 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -45,23 +46,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: 'top-end',
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
-  didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.close)
-  }
-})
-
 const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(state => state.user.user);
   const status = useSelector(state => state.user.status);
   const message = useSelector(state => state.user.message);
+  let [loading, setLoading] = useState(false);
   const classes = useStyles();
   let [email, setEmail] = useState('');
   let [password, setPassword] = useState('');
@@ -72,6 +63,7 @@ const Login = () => {
   useEffect(async () => {
     console.log(message);
     if (message == "Success") {
+      setLoading(false);
       await localStorage.setItem('userLoggedIn', true);
       history.push('/products');
     }
@@ -131,9 +123,16 @@ const Login = () => {
                 text: 'Password minimum 6 characters!',
               });
             } else {
+              setLoading(true);
               dispatch(login(email, password));
             }
-          }} color="primary">{message == "Success" ? "Habibu" : "Submit"}</Button>
+          }} color="primary">{loading ? <Loader
+            type="Puff"
+            color="#00BFFF"
+            height={50}
+            width={50}
+            timeout={10000000} //3 secs
+          /> : "Submit"}</Button>
         </Form>
       </Jumbotron>
     </div>

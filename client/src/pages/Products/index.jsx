@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { addingProduct, gettingProducts, updatingProduct, deletingProduct } from '../../store/action';
+import Loader from "react-loader-spinner";
 
 // Create our number formatter.
 var formatter = new Intl.NumberFormat('id-ID', {
@@ -113,8 +114,8 @@ const Products = () => {
 
   const products = useSelector(state => state.product.products);
 
-  useEffect(() => {
-    dispatch(gettingProducts());
+  useEffect(async () => {
+    await dispatch(gettingProducts());
   }, []);
   const toggle = () => setModal(!modal);
   const editToggle = () => setEditModal(!editModal);
@@ -122,10 +123,10 @@ const Products = () => {
     <div className={classes.scaffold}>
       <div className={classes.container}>
         <Typography className={classes.title}>Products List</Typography>
-        <div style={{ display: 'flex', width: '100%', justifyContent: 'end' }}>
+        {products.length > 0 ? <div style={{ display: 'flex', width: '100%', justifyContent: 'end' }}>
           <Button color="primary" className={classes.button} onClick={toggle}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> &nbsp;Add Product</Button>
-        </div>
-        <Table>
+        </div> : null}
+        {products.length > 0 ? <Table>
           <thead className="bg-warning text-dark">
             <tr>
               <th className={classes.thead}>No</th>
@@ -138,53 +139,58 @@ const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {products.length > 0 ? (
-              products.map((res, index) => (
-                <tr className={classes.tableRow}>
-                  <th className={classes.tr} scope="row">{index + 1}</th>
-                  <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
-                  <td className={classes.tr}>{res.name}</td>
-                  <td className={classes.tr}>{res.category}</td>
-                  <td className={classes.tr}>{formatter.format(res.price)}</td>
-                  <td className={classes.tr}>{res.stock}</td>
-                  <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
-                    e.preventDefault();
-                    setEditId(res.id);
-                    setEditImageUrl(res.image_url);
-                    setEditName(res.name);
-                    setEditCategory(res.category);
-                    setEditPrice(res.price);
-                    setEditStock(res.stock);
-                    editToggle();
-                  }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
-                    e.preventDefault();
-                    Swal.fire({
-                      title: 'Are you sure?',
-                      text: "You won't be able to revert this!",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it!'
-                    }).then((result) => {
-                      if (result.isConfirmed) {
-                        Toast.fire({
-                          icon: 'success',
-                          title: `Successfully deleted ${res.name}!`
-                        });
-                        dispatch(deletingProduct(res.id));
-                      }
-                    })
-                  }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
-                </tr>
-              ))
-            ) : (<tr>
-              <td colSpan="7"><h2 style={{ textAlign: "center", margin: '0 auto', width: '100%' }}>No results found...</h2>
-              </td>
-            </tr>
-            )}
+            {products.map((res, index) => (
+              <tr className={classes.tableRow}>
+                <th className={classes.tr} scope="row">{index + 1}</th>
+                <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
+                <td className={classes.tr}>{res.name}</td>
+                <td className={classes.tr}>{res.category}</td>
+                <td className={classes.tr}>{formatter.format(res.price)}</td>
+                <td className={classes.tr}>{res.stock}</td>
+                <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
+                  e.preventDefault();
+                  setEditId(res.id);
+                  setEditImageUrl(res.image_url);
+                  setEditName(res.name);
+                  setEditCategory(res.category);
+                  setEditPrice(res.price);
+                  setEditStock(res.stock);
+                  editToggle();
+                }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
+                  e.preventDefault();
+                  Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Toast.fire({
+                        icon: 'success',
+                        title: `Successfully deleted ${res.name}!`
+                      });
+                      dispatch(deletingProduct(res.id));
+                    }
+                  })
+                }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
+              </tr>
+            ))
+            }
           </tbody>
-        </Table>
+        </Table> : <div style={{ width: '100%', margin: '0 auto' }}>
+          <Loader
+            style={{ textAlign: 'center', marginTop: '100px' }}
+            type="Puff"
+            color="#00BFFF"
+            height={150}
+            width={150}
+            timeout={10000000}
+          />
+          <h2 style={{ textAlign: 'center' }}>Loading...</h2>
+        </div>}
       </div>
       <Modal style={{ zIndex: 5 }} isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Add A Product</ModalHeader>

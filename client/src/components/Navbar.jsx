@@ -70,8 +70,8 @@ const Navbar = () => {
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { history.push('/products') }} color="success"><FontAwesomeIcon icon={faShoppingBag} /> Products</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => {
             dispatch(setStatus(false));
+            dispatch(setMessage('Good Bye'));
             localStorage.setItem('userLoggedIn', false);
-            dispatch(setMessage('Good bye'));
             Toast.fire({
               icon: 'success',
               title: `Good Bye!`
