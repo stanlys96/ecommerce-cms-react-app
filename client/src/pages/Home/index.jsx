@@ -40,7 +40,7 @@ const Home = () => {
       top: 0;
       left: 0;
       width: 100%;
-      background: url("images/tech_background.jpg") no-repeat center center/cover;
+      background: url("images/technology_future_background.jpeg") no-repeat center center/cover;
       height: 100vh;
       z-index: -1;
     }

@@ -2,7 +2,6 @@ const initialState = {
   user: {},
   status: localStorage.getItem('userLoggedIn'),
   message: '',
-  loading: false,
 }
 
 function reducer(state = initialState, action) {
