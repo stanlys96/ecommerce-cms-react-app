@@ -47,7 +47,7 @@ const Home = () => {
     `,
     <div id="container">
       <Jumbotron className={classes.jumbotron}>
-        <h2 className="display-3">Welcome To Techintos! <FontAwesomeIcon icon={faLaptopCode} /></h2>
+        <h2 className="display-3"><FontAwesomeIcon icon={faLaptopCode} /> Welcome To Techintos! <FontAwesomeIcon icon={faLaptopCode} /></h2>
         <p className="lead">We sell high quality tech products!</p>
         <hr className="my-2" />
         <p>Feel free to ask us any questions!</p>

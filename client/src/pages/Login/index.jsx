@@ -7,7 +7,7 @@ import Style from 'style-it';
 import { Typography } from "@material-ui/core";
 import { Jumbotron, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCompress, faKeyboard, faLaptopCode, faMousePointer, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from "react-router";
 import Loader from "react-loader-spinner";
 
@@ -126,13 +126,13 @@ const Login = () => {
               setLoading(true);
               dispatch(login(email, password));
             }
-          }} color="primary">{loading ? <Loader
+          }} color="primary">{loading ? "" : <FontAwesomeIcon icon={faMousePointer} />}{loading ? <Loader
             type="Puff"
             color="#00BFFF"
             height={50}
             width={50}
             timeout={10000000} //3 secs
-          /> : "Submit"}</Button>
+          /> : " Submit"}</Button>
         </Form>
       </Jumbotron>
     </div>

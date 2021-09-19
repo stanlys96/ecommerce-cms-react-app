@@ -62,7 +62,7 @@ const Navbar = () => {
   return (
     <AppBar color="primary" className={classes.appBar}>
       <ul className={classes.unorderedList}>
-        <li><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
+        <li style={{ fontSize: '24px', fontWeight: '500' }}><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
         <ul className={classes.secondUnorderedList}>
           {(status === false || status == "false" || status == null) && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
           {(status === false || status == "false" || status == null) && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
