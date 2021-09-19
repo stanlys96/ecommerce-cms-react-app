@@ -64,8 +64,8 @@ const Navbar = () => {
       <ul className={classes.unorderedList}>
         <li><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
         <ul className={classes.secondUnorderedList}>
-          {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
-          {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
+          {(status === false || status == "false" || status == null) && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
+          {(status === false || status == "false" || status == null) && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { history.push('/banners') }} color="secondary"><FontAwesomeIcon icon={faAd} /> Banners</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { history.push('/products') }} color="success"><FontAwesomeIcon icon={faShoppingBag} /> Products</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => {

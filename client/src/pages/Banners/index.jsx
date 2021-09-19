@@ -213,6 +213,7 @@ const Banners = () => {
               setImageUrl('');
               setName('');
               setStatus('');
+              console.log('Hello');
               Toast.fire({
                 icon: 'success',
                 title: `Successfully added ${name}!`

@@ -6,7 +6,7 @@ function ProtectedRouteHome({ isAuth: isAuth, component: Component, ...rest }) {
     <Route
       {...rest}
       render={(props) => {
-        if (isAuth === "false" || isAuth == false) {
+        if (isAuth === "false" || isAuth == false || isAuth == null) {
           return <Component />;
         } else {
           return (
