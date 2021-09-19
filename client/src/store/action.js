@@ -41,6 +41,14 @@ export function addProduct(payload) {
   return { type: 'PRODUCT/ADDPRODUCT', payload };
 }
 
+export function getBanners(payload) {
+  return { type: 'BANNER/GETBANNERS', payload };
+}
+
+export function addBanner(payload) {
+  return { type: 'BANNER/ADDBANNER', payload };
+}
+
 export function login(email, password) {
   return async (dispatch) => {
     try {
@@ -53,7 +61,6 @@ export function login(email, password) {
           password
         }
       });
-      console.log(response, "<<< response");
       if (response.status == 200) {
         const user = {
           first_name: response.data.first_name,
@@ -167,8 +174,81 @@ export function deletingProduct(id) {
           id,
         }
       });
-      console.log(response.data, "<<< update");
       dispatch(gettingProducts());
+    } catch (err) {
+      console.log(err, "<<< error");
+    }
+  }
+}
+
+export function gettingBanners() {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/banners/getAll`;
+      const response = await axios({
+        url,
+        method: 'GET',
+      });
+      dispatch(getBanners(response.data));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+}
+
+export function addingBanner(imageUrl, name, status) {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/banners/addBanner`;
+      const response = await axios({
+        url,
+        method: 'POST',
+        data: {
+          image_url: imageUrl,
+          name,
+          status,
+        }
+      });
+      dispatch(addBanner(response.data));
+    } catch (err) {
+      console.log(err, "<<< error");
+    }
+  }
+}
+
+export function updatingBanner(id, imageUrl, name, status) {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/banners/updateBanner`;
+      const response = await axios({
+        url,
+        method: 'PUT',
+        data: {
+          id,
+          image_url: imageUrl,
+          name,
+          status,
+        }
+      });
+      dispatch(gettingBanners());
+    } catch (err) {
+      console.log(err, "<<< error");
+    }
+  }
+}
+
+export function deletingBanner(id) {
+  return async (dispatch) => {
+    try {
+      const url = `${globalUrl}/banners/deleteBanner`;
+      const response = await axios({
+        url,
+        method: 'DELETE',
+        data: {
+          id,
+        }
+      });
+      dispatch(gettingBanners());
     } catch (err) {
       console.log(err, "<<< error");
     }

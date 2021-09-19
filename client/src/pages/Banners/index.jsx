@@ -6,14 +6,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Table, Form, FormGr
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
-import { addingProduct, gettingProducts, updatingProduct, deletingProduct } from '../../store/action';
-
-// Create our number formatter.
-var formatter = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  maximumFractionDigits: 0,
-});
+import { addingBanner, gettingBanners, updatingBanner, deletingBanner } from '../../store/action';
 
 const Toast = Swal.mixin({
   toast: true,
@@ -83,47 +76,45 @@ const useStyles = makeStyles((theme) => ({
   tableButton: {
     fontWeight: '600',
     marginBottom: '5px',
+    width: '150px',
     display: 'block',
-    width: '100%',
+    margin: '0 auto',
   },
   img: {
-    width: '150px',
+    width: '500px',
   }
 }));
 
 const Banners = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // Add Product
+  // Add Banner
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(1);
+  const [status, setStatus] = useState('');
 
-  // Edit Product
+  // Edit Banner
   const [editModal, setEditModal] = useState(false);
   const [editId, setEditId] = useState(0);
   const [editImageUrl, setEditImageUrl] = useState('');
   const [editName, setEditName] = useState('');
-  const [editCategory, setEditCategory] = useState('');
-  const [editPrice, setEditPrice] = useState(0);
-  const [editStock, setEditStock] = useState(1);
+  const [editStatus, setEditStatus] = useState('');
 
-  const products = useSelector(state => state.product.products);
+  const banners = useSelector(state => state.banner.banners);
 
   useEffect(() => {
-    dispatch(gettingProducts());
+    dispatch(gettingBanners());
+    console.log(banners);
   }, []);
   const toggle = () => setModal(!modal);
   const editToggle = () => setEditModal(!editModal);
   return (
     <div className={classes.scaffold}>
       <div className={classes.container}>
-        <Typography className={classes.title}>Products List</Typography>
+        <Typography className={classes.title}>Banners List</Typography>
         <div style={{ display: 'flex', width: '100%', justifyContent: 'end' }}>
-          <Button color="primary" className={classes.button} onClick={toggle}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> &nbsp;Add Product</Button>
+          <Button color="primary" className={classes.button} onClick={toggle}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon> &nbsp;Add Banner</Button>
         </div>
         <Table>
           <thead className="bg-warning text-dark">
@@ -136,23 +127,19 @@ const Banners = () => {
             </tr>
           </thead>
           <tbody>
-            {products.length > 0 ? (
-              products.map((res, index) => (
+            {banners.length > 0 ? (
+              banners.map((res, index) => (
                 <tr className={classes.tableRow}>
                   <th className={classes.tr} scope="row">{index + 1}</th>
                   <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
                   <td className={classes.tr}>{res.name}</td>
-                  <td className={classes.tr}>{res.category}</td>
-                  <td className={classes.tr}>{formatter.format(res.price)}</td>
-                  <td className={classes.tr}>{res.stock}</td>
+                  <td className={classes.tr}>{String(res.status)[0].toUpperCase() + String(res.status).slice(1)}</td>
                   <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
                     e.preventDefault();
                     setEditId(res.id);
                     setEditImageUrl(res.image_url);
                     setEditName(res.name);
-                    setEditCategory(res.category);
-                    setEditPrice(res.price);
-                    setEditStock(res.stock);
+                    setEditStatus(res.status);
                     editToggle();
                   }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" onClick={(e) => {
                     e.preventDefault();
@@ -166,11 +153,11 @@ const Banners = () => {
                       confirmButtonText: 'Yes, delete it!'
                     }).then((result) => {
                       if (result.isConfirmed) {
+                        dispatch(deletingBanner(res.id));
                         Toast.fire({
                           icon: 'success',
                           title: `Successfully deleted ${res.name}!`
                         });
-                        dispatch(deletingProduct(res.id));
                       }
                     })
                   }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
@@ -185,7 +172,7 @@ const Banners = () => {
         </Table>
       </div>
       <Modal style={{ zIndex: 5 }} isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Add A Product</ModalHeader>
+        <ModalHeader toggle={toggle}>Add A Banner</ModalHeader>
         <ModalBody>
           <Form className={classes.form}>
             <FormGroup className={classes.formGroup}>
@@ -203,48 +190,29 @@ const Banners = () => {
               }} type="text" name="name" id="name" placeholder="Name" />
             </FormGroup>
             <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Category</Label>
-              <select onChange={(e) => { setCategory(e.target.value) }} class="form-select" aria-label="Default select example">
-                <option value="" selected>=== SELECT CATEGORY ===</option>
-                <option value="Laptop">Laptop</option>
-                <option value="Phone">Phone</option>
-                <option value="Tablet">Tablet</option>
-                <option value="Other">Other</option>
+              <Label className={classes.label}>Status</Label>
+              <select onChange={(e) => { setStatus(e.target.value) }} class="form-select" aria-label="Default select example">
+                <option value="" selected>=== SELECT STATUS ===</option>
+                <option value="true">True</option>
+                <option value="false">False</option>
               </select>
-            </FormGroup>
-            <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Price</Label>
-              <Input value={price} onChange={(e) => {
-                e.preventDefault();
-                setPrice(e.target.value);
-              }} type="number" name="price" id="price" placeholder="Price" />
-            </FormGroup>
-            <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Stock</Label>
-              <Input value={stock} onChange={(e) => {
-                e.preventDefault();
-                setStock(e.target.value);
-              }} type="number" name="stock" id="stock" placeholder="Stock" />
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            if (imageUrl == "" || name == "" || category == "") {
+            if (imageUrl == "" || name == "" || status == "") {
               Swal.fire({
                 icon: 'error',
                 title: 'Error...',
                 text: 'All fields must be filled!',
               });
-            } else if (price < 1 || stock < 1) {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error...',
-                text: 'Number values can\'t be zero or minus!',
-              });
             } else {
-              dispatch(addingProduct(imageUrl, name, category, price, stock));
+              dispatch(addingBanner(imageUrl, name, status));
+              setImageUrl('');
+              setName('');
+              setStatus('');
               Toast.fire({
                 icon: 'success',
                 title: `Successfully added ${name}!`
@@ -255,9 +223,7 @@ const Banners = () => {
           <Button color="danger" onClick={() => {
             setImageUrl('');
             setName('');
-            setCategory('');
-            setPrice(0);
-            setStock(1);
+            setStatus('');
             toggle();
           }}>Cancel</Button>
         </ModalFooter>
@@ -281,53 +247,30 @@ const Banners = () => {
               }} type="text" name="name" id="name" placeholder="Name" />
             </FormGroup>
             <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Category</Label>
+              <Label className={classes.label}>Status</Label>
               <select onChange={(e) => {
-                setEditCategory(e.target.value);
-                console.log(e.target.value);
+                setEditStatus(e.target.value);
               }} class="form-select" aria-label="Default select example">
-                <option value="Laptop" selected={editCategory === "Laptop" ? true : false}>Laptop</option>
-                <option value="Phone" selected={editCategory === "Phone" ? true : false}>Phone</option>
-                <option value="Tablet" selected={editCategory === "Tablet" ? true : false}>Tablet</option>
-                <option value="Other" selected={editCategory === "Other" ? true : false}>Other</option>
+                <option value="True" selected={editStatus == true ? true : false}>True</option>
+                <option value="False" selected={editStatus == false ? true : false}>False</option>
               </select>
-            </FormGroup>
-            <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Price</Label>
-              <Input value={editPrice} onChange={(e) => {
-                e.preventDefault();
-                setEditPrice(e.target.value);
-              }} type="number" name="price" id="price" placeholder="Price" />
-            </FormGroup>
-            <FormGroup className={classes.formGroup}>
-              <Label className={classes.label}>Stock</Label>
-              <Input value={editStock} onChange={(e) => {
-                e.preventDefault();
-                setEditStock(e.target.value);
-              }} type="number" name="stock" id="stock" placeholder="Stock" />
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            if (editImageUrl == "" || editName == "" || editCategory == "") {
+            if (editImageUrl == "" || editName == "" || editStatus == "") {
               Swal.fire({
                 icon: 'error',
                 title: 'Error...',
                 text: 'All fields must be filled!',
               });
-            } else if (editPrice < 1 || editStock < 1) {
-              Swal.fire({
-                icon: 'error',
-                title: 'Error...',
-                text: 'Number values can\'t be zero or minus!',
-              });
             } else {
-              dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
+              dispatch(updatingBanner(editId, editImageUrl, editName, editStatus));
               Toast.fire({
                 icon: 'success',
-                title: `Successfully edited a product!`
+                title: `Successfully edited a banner!`
               });
               editToggle();
             }

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Products from './pages/Products';
+import Banners from './pages/Banners';
 import ProtectedRouteProducts from './routes/ProtectedRouteProducts';
 import ProtectedRouteHome from './routes/ProtectedRouteHome';
 
@@ -28,6 +29,7 @@ function App() {
           component={Login}
           isAuth={status} key={2} exact />
         <ProtectedRouteProducts path="/products" component={Products} isAuth={status} key={3} exact />
+        <ProtectedRouteProducts path="/banners" component={Banners} isAuth={status} key={4} exact />
       </Switch>
     </div>
   );

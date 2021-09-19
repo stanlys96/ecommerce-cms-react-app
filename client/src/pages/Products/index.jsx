@@ -247,6 +247,11 @@ const Products = () => {
               });
             } else {
               dispatch(addingProduct(imageUrl, name, category, price, stock));
+              setImageUrl('');
+              setName('');
+              setCategory('');
+              setPrice(0);
+              setStock(1);
               Toast.fire({
                 icon: 'success',
                 title: `Successfully added ${name}!`
