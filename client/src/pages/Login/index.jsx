@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from "react-router";
 
+const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '100vw',
@@ -71,7 +73,7 @@ const Login = () => {
     console.log(message);
     if (message == "Success") {
       await localStorage.setItem('userLoggedIn', true);
-      history.push('/dashboard');
+      history.push('/products');
     }
   }, [message]);
   return Style.it(
@@ -110,7 +112,27 @@ const Login = () => {
           </FormGroup>
           <Button className={classes.buttonLogin} onClick={(e) => {
             e.preventDefault();
-            dispatch(login(email, password));
+            if (email == "" || password == "") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'All fields must be filled!',
+              })
+            } else if (!re.test(String(email).toLowerCase())) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'Invalid email format!',
+              })
+            } else if (password.length < 6) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'Password minimum 6 characters!',
+              });
+            } else {
+              dispatch(login(email, password));
+            }
           }} color="primary">{message == "Success" ? "Habibu" : "Submit"}</Button>
         </Form>
       </Jumbotron>

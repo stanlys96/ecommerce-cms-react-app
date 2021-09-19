@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faLaptopCode, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faAd, faHome, faLaptopCode, faShoppingBag, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'reactstrap';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,8 +66,8 @@ const Navbar = () => {
         <ul className={classes.secondUnorderedList}>
           {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
           {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
-          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="secondary"><FontAwesomeIcon icon={faHome} /> Banners</Button></li>}
-          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Products</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="secondary"><FontAwesomeIcon icon={faAd} /> Banners</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { history.push('/products') }} color="success"><FontAwesomeIcon icon={faShoppingBag} /> Products</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => {
             dispatch(setStatus(false));
             localStorage.setItem('userLoggedIn', false);
@@ -77,7 +77,7 @@ const Navbar = () => {
               title: `Good Bye!`
             });
             history.push('/');
-          }} color="danger"><FontAwesomeIcon icon={faHome} /> Logout</Button></li>}
+          }} color="danger"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Button></li>}
         </ul>
       </ul>
     </AppBar>

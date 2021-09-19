@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Dashboard = () => {
+const Products = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // Add Product
@@ -216,14 +216,14 @@ const Dashboard = () => {
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Price</Label>
-              <Input onChange={(e) => {
+              <Input value={price} onChange={(e) => {
                 e.preventDefault();
                 setPrice(e.target.value);
               }} type="number" name="price" id="price" placeholder="Price" />
             </FormGroup>
             <FormGroup className={classes.formGroup}>
               <Label className={classes.label}>Stock</Label>
-              <Input onChange={(e) => {
+              <Input value={stock} onChange={(e) => {
                 e.preventDefault();
                 setStock(e.target.value);
               }} type="number" name="stock" id="stock" placeholder="Stock" />
@@ -233,14 +233,35 @@ const Dashboard = () => {
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            dispatch(addingProduct(imageUrl, name, category, price, stock));
-            Toast.fire({
-              icon: 'success',
-              title: `Successfully added ${name}!`
-            });
-            toggle();
+            if (imageUrl == "" || name == "" || category == "") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'All fields must be filled!',
+              });
+            } else if (price < 1 || stock < 1) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'Number values can\'t be zero or minus!',
+              });
+            } else {
+              dispatch(addingProduct(imageUrl, name, category, price, stock));
+              Toast.fire({
+                icon: 'success',
+                title: `Successfully added ${name}!`
+              });
+              toggle();
+            }
           }}>Add</Button>
-          <Button color="danger" onClick={toggle}>Cancel</Button>
+          <Button color="danger" onClick={() => {
+            setImageUrl('');
+            setName('');
+            setCategory('');
+            setPrice(0);
+            setStock(1);
+            toggle();
+          }}>Cancel</Button>
         </ModalFooter>
       </Modal>
       <Modal style={{ zIndex: 5 }} isOpen={editModal} toggle={editToggle}>
@@ -292,12 +313,26 @@ const Dashboard = () => {
         <ModalFooter>
           <Button color="primary" onClick={(e) => {
             e.preventDefault();
-            dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
-            Toast.fire({
-              icon: 'success',
-              title: `Successfully edited a product!`
-            });
-            editToggle();
+            if (editImageUrl == "" || editName == "" || editCategory == "") {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'All fields must be filled!',
+              });
+            } else if (editPrice < 1 || editStock < 1) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error...',
+                text: 'Number values can\'t be zero or minus!',
+              });
+            } else {
+              dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
+              Toast.fire({
+                icon: 'success',
+                title: `Successfully edited a product!`
+              });
+              editToggle();
+            }
           }}>Edit</Button>
           <Button color="danger" onClick={editToggle}>Cancel</Button>
         </ModalFooter>
@@ -306,4 +341,4 @@ const Dashboard = () => {
   );
 }
 
-export default Dashboard;
+export default Products;

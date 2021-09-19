@@ -10,7 +10,7 @@ function ProtectedRouteHome({ isAuth: isAuth, component: Component, ...rest }) {
           return <Component />;
         } else {
           return (
-            <Redirect to={{ pathname: "/dashboard", state: { from: props.location } }} />
+            <Redirect to={{ pathname: "/products", state: { from: props.location } }} />
           );
         }
       }}

@@ -53,6 +53,7 @@ export function login(email, password) {
           password
         }
       });
+      console.log(response, "<<< response");
       if (response.status == 200) {
         const user = {
           first_name: response.data.first_name,
@@ -67,12 +68,27 @@ export function login(email, password) {
           title: `Successfully logged in as ${email}!`
         });
       } else {
-        console.log(response, "<<<<");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error...',
+          text: response.data.message,
+        });
         dispatch(setMessage(response.data.message));
       }
     } catch (err) {
       if (err.message == "Request failed with status code 404") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error...',
+          text: 'Email or password is incorrect!',
+        });
         dispatch(setMessage(err.message));
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error...',
+          text: err.message,
+        });
       }
     }
   }

@@ -6,8 +6,8 @@ import { Switch, Route, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import ProtectedRouteDashboard from './routes/ProtectedRouteDashboard';
+import Products from './pages/Products';
+import ProtectedRouteProducts from './routes/ProtectedRouteProducts';
 import ProtectedRouteHome from './routes/ProtectedRouteHome';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
           path="/login"
           component={Login}
           isAuth={status} key={2} exact />
-        <ProtectedRouteDashboard path="/dashboard" component={Dashboard} isAuth={status} key={3} exact />
+        <ProtectedRouteProducts path="/products" component={Products} isAuth={status} key={3} exact />
       </Switch>
     </div>
   );

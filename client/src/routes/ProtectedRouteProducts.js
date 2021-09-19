@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 
-function ProtectedRouteDashboard({ isAuth: isAuth, component: Component, ...rest }) {
+function ProtectedRouteProducts({ isAuth: isAuth, component: Component, ...rest }) {
   return (
     <Route
       {...rest}
@@ -18,4 +18,4 @@ function ProtectedRouteDashboard({ isAuth: isAuth, component: Component, ...rest
   )
 }
 
-export default ProtectedRouteDashboard;
+export default ProtectedRouteProducts;
