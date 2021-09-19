@@ -54,7 +54,7 @@ const Navbar = () => {
         <ul className={classes.secondUnorderedList}>
           {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/') }} color="danger"><FontAwesomeIcon icon={faHome} /> Home</Button></li>}
           {(status === false || status == "false") && <li className={classes.li}><Button onClick={() => { history.push('/login') }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Login</Button></li>}
-          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="danger"><FontAwesomeIcon icon={faHome} /> Banners</Button></li>}
+          {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="secondary"><FontAwesomeIcon icon={faHome} /> Banners</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => { }} color="success"><FontAwesomeIcon icon={faSignInAlt} /> Products</Button></li>}
           {(status === true || status == "true") && <li className={classes.li}><Button onClick={() => {
             dispatch(setStatus(false));

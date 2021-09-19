@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from 'react-redux';
 import { addingProduct, gettingProducts } from '../../store/action';
+import Image from '../../assets/macbook_air.png';
 
 // Create our number formatter.
 var formatter = new Intl.NumberFormat('id-ID', {
@@ -72,12 +73,16 @@ const useStyles = makeStyles((theme) => ({
   tableButton: {
     fontWeight: '600',
     marginBottom: '5px',
+  },
+  img: {
+    width: '150px',
   }
 }));
 
 const Dashboard = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  // Add Product
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const [name, setName] = useState('');
@@ -85,12 +90,22 @@ const Dashboard = () => {
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(1);
 
+  // Edit Product
+  const [editModal, setEditModal] = useState(false);
+  const [editId, setEditId] = useState(0);
+  const [editImageUrl, setEditImageUrl] = useState('');
+  const [editName, setEditName] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editPrice, setEditPrice] = useState(0);
+  const [editStock, setEditStock] = useState(1);
+
   const products = useSelector(state => state.product.products);
 
   useEffect(() => {
     dispatch(gettingProducts());
   }, []);
   const toggle = () => setModal(!modal);
+  const editToggle = () => setEditModal(!editModal);
   return (
     <div className={classes.scaffold}>
       <div className={classes.container}>
@@ -115,12 +130,21 @@ const Dashboard = () => {
               products.map((res, index) => (
                 <tr className={classes.tableRow}>
                   <th className={classes.tr} scope="row">{index + 1}</th>
-                  <td className={classes.tr}><img href={res.image_url} alt="not found" /></td>
+                  <td className={classes.tr}><img className={classes.img} src={res.image_url} /></td>
                   <td className={classes.tr}>{res.name}</td>
                   <td className={classes.tr}>{res.category}</td>
                   <td className={classes.tr}>{formatter.format(res.price)}</td>
                   <td className={classes.tr}>{res.stock}</td>
-                  <td className={classes.trLast}><Button outline color="primary" className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
+                  <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
+                    e.preventDefault();
+                    setEditId(res.id);
+                    setEditImageUrl(res.image_url);
+                    setEditName(res.name);
+                    setEditCategory(res.category);
+                    setEditPrice(res.price);
+                    setEditStock(res.stock);
+                    editToggle();
+                  }} className={classes.tableButton}><FontAwesomeIcon icon={faEdit}></FontAwesomeIcon> Edit</Button><Button outline color="danger" className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
                 </tr>
               ))
             ) : (<h2 style={{ textAlign: "center" }}>No results found...</h2>
@@ -177,6 +201,55 @@ const Dashboard = () => {
             toggle();
           }}>Add</Button>
           <Button color="danger" onClick={toggle}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+      <Modal style={{ zIndex: 5 }} isOpen={editModal} toggle={editToggle}>
+        <ModalHeader toggle={editToggle}>Edit Product</ModalHeader>
+        <ModalBody>
+          <Form className={classes.form}>
+            <FormGroup className={classes.formGroup}>
+              <Label className={classes.label}>Image URL</Label>
+              <Input value={editImageUrl} onChange={(e) => {
+                e.preventDefault();
+                setEditImageUrl(e.target.value);
+              }} type="text" name="image_url" id="image_url" placeholder="Image URL" />
+            </FormGroup>
+            <FormGroup className={classes.formGroup}>
+              <Label className={classes.label}>Name</Label>
+              <Input value={editName} onChange={(e) => {
+                e.preventDefault();
+                setEditName(e.target.value);
+              }} type="text" name="name" id="name" placeholder="Name" />
+            </FormGroup>
+            <FormGroup className={classes.formGroup}>
+              <Label className={classes.label}>Category</Label>
+              <Input value={editCategory} onChange={(e) => {
+                e.preventDefault();
+                setEditCategory(e.target.value);
+              }} type="text" name="category" id="category" placeholder="Category" />
+            </FormGroup>
+            <FormGroup className={classes.formGroup}>
+              <Label className={classes.label}>Price</Label>
+              <Input value={editPrice} onChange={(e) => {
+                e.preventDefault();
+                setEditPrice(e.target.value);
+              }} type="number" name="price" id="price" placeholder="Price" />
+            </FormGroup>
+            <FormGroup className={classes.formGroup}>
+              <Label className={classes.label}>Stock</Label>
+              <Input value={editStock} onChange={(e) => {
+                e.preventDefault();
+                setEditStock(e.target.value);
+              }} type="number" name="stock" id="stock" placeholder="Stock" />
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={(e) => {
+            e.preventDefault();
+            editToggle();
+          }}>Edit</Button>
+          <Button color="danger" onClick={editToggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
     </div>
