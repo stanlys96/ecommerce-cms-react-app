@@ -18,6 +18,24 @@ class ProductController {
       next(err);
     }
   }
+
+  static async updateProduct(req, res, next) {
+    try {
+      const updateProduct = await Product.updateProduct(req.body);
+      res.status(200).json(updateProduct.rows[0]);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async deleteProduct(req, res, next) {
+    try {
+      const deleteProduct = await Product.deleteProduct(req.body);
+      res.status(200).json(deleteProduct.rows[0]);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = ProductController;

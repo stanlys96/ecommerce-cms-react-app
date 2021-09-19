@@ -19,6 +19,26 @@ class Product {
       console.log(err);
     }
   }
+
+  static async updateProduct(product) {
+    let { id, imageUrl, name, category, price, stock } = product;
+    try {
+      const updateProduct = await pool.query("UPDATE products SET image_url = $1, name = $2, category = $3, price, $4, stock = $5 WHERE id = $6 RETURNING *;", [imageUrl, name, category, price, stock, id]);
+      return updateProduct;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async deleteProduct(product) {
+    let { id } = product;
+    try {
+      const deleteProduct = await pool.query("DELETE FROM products WHERE id = $1 RETURNING *;", [id]);
+      return deleteProduct;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 module.exports = Product;
