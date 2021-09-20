@@ -3,9 +3,22 @@ const { hashPassword, comparePassword } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
 
 class UserController {
-  static async register(req, res, next) {
+  static async registerAsCustomer(req, res, next) {
     try {
-      const newUser = await User.register(req.body);
+      const newUser = await User.registerAsCustomer(req.body);
+      if (newUser == "email_exist") {
+        res.status(404).json({ message: "Email already registered!" });
+      } else {
+        res.status(200).json({ ...newUser.rows[0], message: "Success" });
+      }
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async registerAsAdmin(req, res, next) {
+    try {
+      const newUser = await User.registerAsAdmin(req.body);
       if (newUser == "email_exist") {
         res.status(404).json({ message: "Email already registered!" });
       } else {
