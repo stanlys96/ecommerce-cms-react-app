@@ -10,7 +10,7 @@ class Cart {
     }
   }
 
-  static async addCart(cart) {
+  static async updateCart(cart, method) {
     try {
       let { user_id, product_id, quantity } = cart;
       const findExistingCart = await pool.query("SELECT * FROM cart WHERE user_id = $1 AND product_id = $2", [user_id, product_id]);
@@ -18,8 +18,13 @@ class Cart {
         const newCart = await pool.query("INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *;", [user_id, product_id, quantity]);
         return { ...newCart.rows[0], message: 'Success' };
       } else {
-        const addToExistingCart = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
-        return { ...addToExistingCart.rows[0], message: 'Success' };
+        let queryData = {};
+        if (method == "add") {
+          queryData = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
+        } else if (method == "subtract") {
+          queryData = await pool.query("UPDATE cart SET quantity = quantity - $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
+        }
+        return { ...queryData.rows[0], message: 'Success' };
       }
     } catch (err) {
       console.log(err);

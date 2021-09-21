@@ -11,10 +11,11 @@ class CartController {
     }
   }
 
-  static async addToCart(req, res, next) {
+  static async updateCart(req, res, next) {
+    console.log(req.body, req.params.method);
     try {
-      const addToCart = await Cart.addCart(req.body);
-      res.status(200).json(addToCart);
+      const updateCart = await Cart.updateCart(req.body, req.params.method);
+      res.status(200).json(updateCart);
     } catch (err) {
       next(err);
     }
