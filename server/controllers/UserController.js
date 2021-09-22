@@ -38,6 +38,7 @@ class UserController {
         const comparedPassword = comparePassword(password, loggedInUser.password);
         if (comparedPassword) {
           const token = generateToken({
+            user_id: loggedInUser.user_id,
             first_name: loggedInUser.first_name,
             last_name: loggedInUser.last_name,
             email: loggedInUser.email
@@ -56,7 +57,6 @@ class UserController {
         res.status(404).json({ message: "Email or password is incorrect!" });
       }
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
