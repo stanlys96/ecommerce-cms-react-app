@@ -19,6 +19,15 @@ class CartController {
       next(err);
     }
   }
+
+  static async deleteCart(req, res, next) {
+    try {
+      const deleteCart = await Cart.deleteCart(req.body);
+      res.status(200).json(deleteCart);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = CartController;
