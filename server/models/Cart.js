@@ -45,7 +45,7 @@ class Cart {
     try {
       let { user_id, product_id } = cart;
       const query = await pool.query("DELETE FROM cart WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id]);
-      return { ...queryData.rows[0], message: 'Success' };
+      return { ...query.rows[0], message: 'Success' };
     } catch (err) {
       console.log(err);
     }
