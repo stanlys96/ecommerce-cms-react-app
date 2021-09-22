@@ -3,7 +3,7 @@ const pool = require('../database/db');
 class Product {
   static async getProducts() {
     try {
-      const products = pool.query("SELECT * FROM products ORDER BY id ASC;");
+      const products = await pool.query("SELECT * FROM products ORDER BY product_id ASC;");
       return products;
     } catch (err) {
       console.log(err);

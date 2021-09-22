@@ -3,7 +3,7 @@ const pool = require('../database/db');
 class Banner {
   static async getBanners() {
     try {
-      const banners = pool.query("SELECT * FROM banners ORDER BY id ASC;");
+      const banners = await pool.query("SELECT * FROM banners ORDER BY banner_id ASC;");
       return banners;
     } catch (err) {
       console.log(err);
