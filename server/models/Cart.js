@@ -1,4 +1,3 @@
-const { response } = require('express');
 const pool = require('../database/db');
 
 class Cart {
@@ -23,7 +22,8 @@ class Cart {
         let currentCart = findExistingCart.rows[0];
         let queryData = {};
         if (method == "add") {
-          if (currentCart.quantity + quantity > currentCart.stock) {
+          console.log(currentCart.quantity, quantity, currentCart.stock);
+          if (currentCart.quantity + parseInt(quantity) > currentCart.stock) {
             return { message: "Total amount in cart can't exceed total stock!" };
           }
           queryData = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
