@@ -1,3 +1,4 @@
+const { response } = require('express');
 const pool = require('../database/db');
 
 class Cart {
@@ -13,13 +14,18 @@ class Cart {
   static async updateCart(cart, method) {
     try {
       let { user_id, product_id, quantity } = cart;
-      const findExistingCart = await pool.query("SELECT * FROM cart WHERE user_id = $1 AND product_id = $2", [user_id, product_id]);
+      const findExistingCart = await pool.query("SELECT C.*, P.stock FROM cart C INNER JOIN products P ON C.product_id = P.product_id WHERE user_id = $1 AND C.product_id = $2", [user_id, product_id]);
+      console.log(findExistingCart.rows[0]);
       if (findExistingCart.rowCount == 0) {
         const newCart = await pool.query("INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *;", [user_id, product_id, quantity]);
         return { ...newCart.rows[0], message: 'Success' };
       } else {
+        let currentCart = findExistingCart.rows[0];
         let queryData = {};
         if (method == "add") {
+          if (currentCart.quantity + quantity > currentCart.stock) {
+            return { message: "Amount can't exceed total stock!" };
+          }
           queryData = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
         } else if (method == "subtract") {
           queryData = await pool.query("UPDATE cart SET quantity = quantity - $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);

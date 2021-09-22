@@ -12,7 +12,6 @@ class CartController {
   }
 
   static async updateCart(req, res, next) {
-    console.log(req.body, req.params.method);
     try {
       const updateCart = await Cart.updateCart(req.body, req.params.method);
       res.status(200).json(updateCart);
