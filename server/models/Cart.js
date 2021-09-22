@@ -27,8 +27,8 @@ class Cart {
             return { message: "Total amount in cart can't exceed total stock!" };
           }
           queryData = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
-        } else if (method == "subtract") {
-          queryData = await pool.query("UPDATE cart SET quantity = quantity - $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
+        } else if (method == "free") {
+          queryData = await pool.query("UPDATE cart SET quantity = $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
         }
         return { ...queryData.rows[0], message: 'Success' };
       }
