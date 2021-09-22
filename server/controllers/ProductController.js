@@ -36,6 +36,15 @@ class ProductController {
       next(err);
     }
   }
+
+  static async reduceProductStock(req, res, next) {
+    try {
+      const reduceStock = await Product.reduceStock(req.body);
+      res.status(200).json(reduceStock.rows[0]);
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = ProductController;

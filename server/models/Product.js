@@ -25,7 +25,7 @@ class Product {
     price = parseInt(price);
     stock = parseInt(stock);
     try {
-      const updateProduct = await pool.query("UPDATE products SET image_url = $1, name = $2, category = $3, price = $4, stock = $5 WHERE id = $6 RETURNING *;", [image_url, name, category, price, stock, id]);
+      const updateProduct = await pool.query("UPDATE products SET image_url = $1, name = $2, category = $3, price = $4, stock = $5 WHERE product_id = $6 RETURNING *;", [image_url, name, category, price, stock, id]);
       return updateProduct;
     } catch (err) {
       console.log(err, "<<<");
@@ -35,8 +35,18 @@ class Product {
   static async deleteProduct(product) {
     let { id } = product;
     try {
-      const deleteProduct = await pool.query("DELETE FROM products WHERE id = $1 RETURNING *;", [id]);
+      const deleteProduct = await pool.query("DELETE FROM products WHERE product_id = $1 RETURNING *;", [id]);
       return deleteProduct;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async reduceStock(product) {
+    let { product_id, quantity } = product;
+    try {
+      const reduceStock = await pool.query("UPDATE products SET stock = stock - $1 WHERE product_id = $2 RETURNING *;", [quantity, product_id]);
+      return reduceStock;
     } catch (err) {
       console.log(err);
     }
