@@ -3,7 +3,7 @@ const pool = require('../database/db');
 class Cart {
   static async getCart(user_id) {
     try {
-      const cart = await pool.query("SELECT P.*, C.quantity FROM products P INNER JOIN cart C ON C.product_id = P.product_id INNER JOIN users U ON U.user_id = C.user_id WHERE C.user_id = $1", [user_id]);
+      const cart = await pool.query("SELECT P.*, C.quantity FROM products P INNER JOIN cart C ON C.product_id = P.product_id INNER JOIN users U ON U.user_id = C.user_id WHERE C.user_id = $1 ORDER BY C.cart_id ASC;", [user_id]);
       return cart.rows;
     } catch (err) {
       console.log(err);
@@ -27,6 +27,7 @@ class Cart {
           }
           queryData = await pool.query("UPDATE cart SET quantity = quantity + $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
         } else if (method == "free") {
+          console.log(currentCart);
           if (quantity <= currentCart.stock) {
             queryData = await pool.query("UPDATE cart SET quantity = $3 WHERE user_id = $1 AND product_id = $2 RETURNING *;", [user_id, product_id, quantity]);
           } else {
