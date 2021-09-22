@@ -3,7 +3,7 @@ const pool = require('../database/db');
 class Cart {
   static async getCart(user_id) {
     try {
-      const cart = await pool.query("SELECT P.*, C.quantity FROM products P INNER JOIN cart C ON C.product_id = P.product_id INNER JOIN users U ON U.user_id = C.user_id WHERE C.user_id = $1 ORDER BY C.cart_id ASC;", [user_id]);
+      const cart = await pool.query("SELECT P.*, C.quantity, C.cart_id FROM products P INNER JOIN cart C ON C.product_id = P.product_id INNER JOIN users U ON U.user_id = C.user_id WHERE C.user_id = $1 ORDER BY C.cart_id ASC;", [user_id]);
       return cart.rows;
     } catch (err) {
       console.log(err);
