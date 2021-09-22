@@ -17,7 +17,7 @@ class TransactionHistory {
       quantity = parseInt(quantity);
       totalPrice = parseInt(totalPrice);
       user_id = parseInt(user_id);
-      const newHistory = await pool.query("INSERT INTO transaction_history (date, image_url, name, quantity, totalPrice, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;", [date, image_url, name, quantity, totalPrice, user_id]);
+      const newHistory = await pool.query("INSERT INTO transaction_history (date, image_url, name, quantity, total_price, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;", [date, image_url, name, quantity, totalPrice, user_id]);
       return newHistory;
     } catch (err) {
       console.log(err);
