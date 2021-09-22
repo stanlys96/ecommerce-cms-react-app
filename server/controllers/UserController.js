@@ -44,6 +44,7 @@ class UserController {
             email: loggedInUser.email
           });
           res.status(200).json({
+            user_id: loggedInUser.user_id,
             first_name: loggedInUser.first_name,
             last_name: loggedInUser.last_name,
             email: loggedInUser.email,
