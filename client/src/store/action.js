@@ -149,7 +149,7 @@ export function updatingProduct(id, imageUrl, name, category, price, stock) {
         url,
         method: 'PUT',
         data: {
-          id,
+          product_id: id,
           image_url: imageUrl,
           name,
           category,
@@ -173,7 +173,7 @@ export function deletingProduct(id) {
         url,
         method: 'DELETE',
         data: {
-          id,
+          product_id: id,
         }
       });
       dispatch(gettingProducts());
@@ -226,7 +226,7 @@ export function updatingBanner(id, imageUrl, name, status) {
         url,
         method: 'PUT',
         data: {
-          id,
+          banner_id: id,
           image_url: imageUrl,
           name,
           status,
@@ -247,7 +247,7 @@ export function deletingBanner(id) {
         url,
         method: 'DELETE',
         data: {
-          id,
+          banner_id: id,
         }
       });
       dispatch(gettingBanners());

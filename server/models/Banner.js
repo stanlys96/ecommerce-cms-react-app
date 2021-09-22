@@ -21,9 +21,9 @@ class Banner {
   }
 
   static async updateBanner(banner) {
-    let { id, image_url, name, status } = banner;
+    let { banner_id, image_url, name, status } = banner;
     try {
-      const updateBanner = await pool.query("UPDATE banners SET image_url = $1, name = $2, status = $3 WHERE id = $4 RETURNING *;", [image_url, name, status, id]);
+      const updateBanner = await pool.query("UPDATE banners SET image_url = $1, name = $2, status = $3 WHERE banner_id = $4 RETURNING *;", [image_url, name, status, banner_id]);
       return updateBanner;
     } catch (err) {
       console.log(err, "<<<");
@@ -31,9 +31,9 @@ class Banner {
   }
 
   static async deleteBanner(banner) {
-    let { id } = banner;
+    let { banner_id } = banner;
     try {
-      const deleteBanner = await pool.query("DELETE FROM banners WHERE id = $1 RETURNING *;", [id]);
+      const deleteBanner = await pool.query("DELETE FROM banners WHERE banner_id = $1 RETURNING *;", [banner_id]);
       return deleteBanner;
     } catch (err) {
       console.log(err);
