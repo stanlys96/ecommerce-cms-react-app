@@ -95,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
 const Products = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   // Add Product
   const [modal, setModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
@@ -111,6 +112,7 @@ const Products = () => {
   const [editCategory, setEditCategory] = useState('');
   const [editPrice, setEditPrice] = useState(0);
   const [editStock, setEditStock] = useState(1);
+  let timerInterval;
 
   const products = useSelector(state => state.product.products);
 
@@ -149,7 +151,7 @@ const Products = () => {
                 <td className={classes.tr}>{res.stock}</td>
                 <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
                   e.preventDefault();
-                  setEditId(res.id);
+                  setEditId(res.product_id);
                   setEditImageUrl(res.image_url);
                   setEditName(res.name);
                   setEditCategory(res.category);
@@ -162,17 +164,20 @@ const Products = () => {
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
                     icon: 'warning',
+                    // html: 'I will close in <b></b> milliseconds.',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, delete it!'
-                  }).then((result) => {
+                    confirmButtonText: 'Yes, delete it!',
+                  }).then(async (result) => {
+                    Swal.showLoading();
                     if (result.isConfirmed) {
+                      await dispatch(deletingProduct(res.product_id));
+                      Swal.close();
                       Toast.fire({
                         icon: 'success',
                         title: `Successfully deleted ${res.name}!`
                       });
-                      dispatch(deletingProduct(res.id));
                     }
                   })
                 }} className={classes.tableButton}><FontAwesomeIcon icon={faTrash}></FontAwesomeIcon> Delete</Button></td>
@@ -237,7 +242,7 @@ const Products = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => {
+          <Button color="primary" onClick={async (e) => {
             e.preventDefault();
             if (imageUrl == "" || name == "" || category == "") {
               Swal.fire({
@@ -252,7 +257,7 @@ const Products = () => {
                 text: 'Number values can\'t be zero or minus!',
               });
             } else {
-              dispatch(addingProduct(imageUrl, name, category, price, stock));
+              await dispatch(addingProduct(imageUrl, name, category, price, stock));
               setImageUrl('');
               setName('');
               setCategory('');
@@ -322,7 +327,7 @@ const Products = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => {
+          <Button color="primary" onClick={async (e) => {
             e.preventDefault();
             if (editImageUrl == "" || editName == "" || editCategory == "") {
               Swal.fire({
@@ -337,7 +342,8 @@ const Products = () => {
                 text: 'Number values can\'t be zero or minus!',
               });
             } else {
-              dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock));
+              setLoading(true);
+              await dispatch(updatingProduct(editId, editImageUrl, editName, editCategory, editPrice, editStock, setLoading));
               Toast.fire({
                 icon: 'success',
                 title: `Successfully edited a product!`

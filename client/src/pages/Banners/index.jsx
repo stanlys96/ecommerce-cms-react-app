@@ -135,7 +135,7 @@ const Banners = () => {
                 <td className={classes.tr}>{String(res.status)[0].toUpperCase() + String(res.status).slice(1)}</td>
                 <td className={classes.trLast}><Button outline color="primary" onClick={(e) => {
                   e.preventDefault();
-                  setEditId(res.id);
+                  setEditId(res.banner_id);
                   setEditImageUrl(res.image_url);
                   setEditName(res.name);
                   setEditStatus(res.status);
@@ -152,7 +152,7 @@ const Banners = () => {
                     confirmButtonText: 'Yes, delete it!'
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      dispatch(deletingBanner(res.id));
+                      dispatch(deletingBanner(res.banner_id));
                       Toast.fire({
                         icon: 'success',
                         title: `Successfully deleted ${res.name}!`

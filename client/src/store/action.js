@@ -141,7 +141,7 @@ export function addingProduct(imageUrl, name, category, price, stock) {
   }
 }
 
-export function updatingProduct(id, imageUrl, name, category, price, stock) {
+export function updatingProduct(id, imageUrl, name, category, price, stock, setLoading) {
   return async (dispatch) => {
     try {
       console.log(id, imageUrl, name, category, price, stock);
@@ -161,6 +161,8 @@ export function updatingProduct(id, imageUrl, name, category, price, stock) {
       dispatch(gettingProducts());
     } catch (err) {
       console.log(err, "<<< error");
+    } finally {
+      setLoading(false);
     }
   }
 }
