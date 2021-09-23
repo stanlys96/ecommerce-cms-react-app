@@ -144,6 +144,7 @@ export function addingProduct(imageUrl, name, category, price, stock) {
 export function updatingProduct(id, imageUrl, name, category, price, stock) {
   return async (dispatch) => {
     try {
+      console.log(id, imageUrl, name, category, price, stock);
       const url = `${globalUrl}/products/updateProduct`;
       const response = await axios({
         url,
@@ -157,7 +158,6 @@ export function updatingProduct(id, imageUrl, name, category, price, stock) {
           stock,
         }
       });
-      console.log(response.data, "<<< update");
       dispatch(gettingProducts());
     } catch (err) {
       console.log(err, "<<< error");
