@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "20px",
     color: "#FFFFFF",
     width: '100%',
+    marginTop: '50px',
   }
 }));
 
@@ -30,8 +31,8 @@ const Home = () => {
     #container {
       text-align: center;
       background-color: rgba(0, 0, 0, 0.6);
-      height: 92vh;
-      margin: 8vh 0 0 0;
+      height: 100vh;
+      padding: 8vh 0 0 0;
       padding: 50px 200px 0;
     }
     #container:before {

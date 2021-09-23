@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     position: 'fixed',
+    width: '100%',
     zIndex: 1,
   },
   unorderedList: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: "15px 150px 0",
+    width: '100%',
   },
   secondUnorderedList: {
     listStyle: 'none',
@@ -60,7 +62,7 @@ const Navbar = () => {
     console.log(status, "<<<");
   }, [status]);
   return (
-    <AppBar color="primary" className={classes.appBar}>
+    <div className={`bg-light ${classes.appBar}`}>
       <ul className={classes.unorderedList}>
         <li style={{ fontSize: '24px', fontWeight: '500' }}><FontAwesomeIcon icon={faLaptopCode} /> Techintos</li>
         <ul className={classes.secondUnorderedList}>
@@ -80,7 +82,7 @@ const Navbar = () => {
           }} color="danger"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Button></li>}
         </ul>
       </ul>
-    </AppBar>
+    </div>
   );
 }
 

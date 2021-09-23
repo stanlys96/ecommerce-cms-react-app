@@ -31,11 +31,12 @@ const useStyles = makeStyles((theme) => ({
   scaffold: {
     backgroundColor: '#F9EED3',
     paddingBottom: '30px',
-    minHeight: '92vh',
+    minHeight: '100vh',
   },
   container: {
     maxWidth: '1200px',
-    margin: '8vh auto 0',
+    margin: '0 auto',
+    paddingTop: '8vh',
   },
   button: {
     marginBottom: '10px',
